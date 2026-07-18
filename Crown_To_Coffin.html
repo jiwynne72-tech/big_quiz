@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crown & Coffin: The Monarch Trivia Game</title>
+    <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --primary-color: #8e44ad;
+            --primary-hover: #732d91;
+            --success-color: #27ae60;
+            --error-color: #c0392b;
+            --border-color: #dcdde1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            padding: 30px;
+            border-top: 6px solid var(--primary-color);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* Mode Switcher */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.2s;
+            text-align: center;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+            margin-bottom: -13px;
+        }
+
+        .view-panel {
+            display: none;
+        }
+
+        .view-panel.active {
+            display: block;
+        }
+
+        /* Score Panel */
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .score-val {
+            color: var(--primary-color);
+        }
+
+        /* Quiz Panel Layout */
+        .question-box {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .option-btn {
+            width: 100%;
+            padding: 14px 20px;
+            text-align: left;
+            background: #fff;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-color);
+            background: #fdf8ff;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        /* Answer states */
+        .option-btn.correct {
+            background-color: #e8f8f0;
+            border-color: var(--success-color);
+            color: #1e7e34;
+            font-weight: 600;
+        }
+
+        .option-btn.incorrect {
+            background-color: #fceade;
+            border-color: var(--error-color);
+            color: #a02619;
+        }
+
+        .feedback-box {
+            min-height: 60px;
+            margin-bottom: 20px;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            display: none;
+        }
+
+        .feedback-box.show {
+            display: block;
+        }
+
+        .feedback-box.correct-feed {
+            background: #e8f8f0;
+            color: #1e7e34;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .feedback-box.incorrect-feed {
+            background: #fceade;
+            color: #a02619;
+            border-left: 4px solid var(--error-color);
+        }
+
+        .action-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: background 0.2s;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Explorer Panel Layout */
+        .selector-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        select:focus {
+            border-color: var(--primary-color);
+        }
+
+        .dossier-card {
+            background: #fdfdfd;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .dossier-row {
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .dossier-row strong {
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            display: inline-block;
+            width: 130px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <header>
+        <h1>Crown & Coffin</h1>
+        <div class="subtitle">The Interactive English Monarchs Quiz</div>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('quiz')">Trivia Quiz</button>
+        <button class="tab-btn" onclick="switchTab('explorer')">Dossier Explorer</button>
+    </div>
+
+    <div id="quiz-panel" class="view-panel active">
+        <div class="score-board">
+            <div>Score: <span id="score-count" class="score-val">0</span> / <span id="total-count">0</span></div>
+            <div>Streak: <span id="streak-count" class="score-val">0</span> 🔥</div>
+        </div>
+
+        <div class="question-box" id="question-text">Loading historical question...</div>
+        
+        <div class="options-grid" id="options-container">
+            </div>
+
+        <div class="feedback-box" id="feedback-text"></div>
+
+        <button class="action-btn" id="next-btn" onclick="generateQuestion()" style="display: none;">Next Question</button>
+    </div>
+
+    <div id="explorer-panel" class="view-panel">
+        <div class="selector-group">
+            <label for="monarch-select">Choose a Ruler to Inspect:</label>
+            <select id="monarch-select" onchange="loadDossier(this.value)">
+                </select>
+        </div>
+
+        <div class="dossier-card" id="dossier-display">
+            </div>
+    </div>
+</div>
+
+<script>
+    // Greatly expanded dataset containing 32 distinct rulers across English/British history
+    const monarchsData = [
+        { name: "Athelstan", house: "Wessex", reign: "924 - 939", death: "Natural causes at Gloucester; he was unmarried and succeeded by his half-brother.", fact: "Widely regarded by modern historians as the first true, undisputed King of all England." },
+        { name: "Cnut (Canute the Great)", house: "Denmark", reign: "1016 - 1035", death: "Natural causes at Shaftesbury, buried in the Old Minster at Winchester.", fact: "A Danish prince who ruled England, Denmark, and Norway simultaneously as part of the North Sea Empire." },
+        { name: "Edward (The Confessor)", house: "Wessex", reign: "1042 - 1066", death: "A series of strokes, falling into a brief coma shortly after the consecration of Westminster Abbey.", fact: "One of England's patron saints, his death without a direct heir triggered the Norman Conquest." },
+        { name: "William I (The Conqueror)", house: "Normans", reign: "1066 - 1087", death: "Complications from a riding injury where his saddle ruptured his intestines during a siege.", fact: "Commissioned the Domesday Book, a massive wealth and land survey of England." },
+        { name: "Henry I", house: "Normans", reign: "1100 - 1135", death: "Severe food poisoning from gorging on a 'surfeit of lampreys' (jawless, eel-like fish) against his doctor's advice.", fact: "Founded the system of the Exchequer to track the crown's finances." },
+        { name: "Stephen", house: "Blois", reign: "1135 - 1154", death: "A violent stomach disorder accompanied by severe internal bleeding at Dover.", fact: "His entire reign was consumed by 'The Anarchy', a bitter civil war fought against his cousin Empress Matilda." },
+        { name: "Henry II", house: "Plantagenets", reign: "1154 - 1189", death: "A bleeding stomach ulcer and fever, exacerbated by the rebellion of his own sons.", fact: "Unwittingly instigated the murder of Archbishop Thomas Becket inside Canterbury Cathedral." },
+        { name: "Richard I (The Lionheart)", house: "Plantagenets", reign: "1189 - 1199", death: "Gangrene from a crossbow wound to the shoulder, fired by a boy cook using a frying pan as a shield.", fact: "Spoke very little English and only spent about six months of his entire ten-year reign in England." },
+        { name: "John", house: "Plantagenets", reign: "1199 - 1216", death: "Dysentery caught while out on campaign, allegedly made worse by drinking bad peach cider.", fact: "Forced by his barons to seal the Magna Carta, establishing that the king is not above the law." },
+        { name: "Edward I (Longshanks)", house: "Plantagenets", reign: "1272 - 1307", death: "Severe dysentery on his way north for yet another military campaign against the Scots.", fact: "Conquered Wales, built a ring of massive stone castles there, and expelled the Jewish population from England." },
+        { name: "Edward II", house: "Plantagenets", reign: "1307 - 1327", death: "Brutally murdered while imprisoned, allegedly via a red-hot iron rod, on the orders of his wife Queen Isabella.", fact: "Suffered a catastrophic defeat against the Scots at the Battle of Bannockburn." },
+        { name: "Edward III", house: "Plantagenets", reign: "1327 - 1377", death: "A massive stroke at Sheen Palace, leaving him unable to speak during his final hours.", fact: "Transformed England into a major military power and declared the Hundred Years' War against France." },
+        { name: "Henry V", house: "Lancastrians", reign: "1413 - 1422", death: "Severe dysentery during the siege of Meaux, making him too weak to walk.", fact: "Achieved a legendary military triumph against massive odds at the Battle of Agincourt." },
+        { name: "Henry VI", house: "Lancastrians", reign: "1422 - 1461", death: "Murdered while imprisoned in the Tower of London, officially recorded by Yorkists as dying of 'pure displeasure and melancholy.'", fact: "Inherited the throne when he was only nine months old and suffered severe bouts of catatonic mental illness." },
+        { name: "Richard III", house: "Yorkists", reign: "1483 - 1485", death: "Slain brutally on the battlefield after being surrounded by his enemies.", fact: "The last English king to die in battle. His skeleton was famously discovered under a Leicester parking lot in 2012." },
+        { name: "Henry VII", house: "Tudors", reign: "1485 - 1509", death: "Severe respiratory illness, likely tuberculosis, which progressively weakened him over several years.", fact: "Won the crown at the Battle of Bosworth Field, ending the Wars of the Roses and establishing the Tudor dynasty." },
+        { name: "Henry VIII", house: "Tudors", reign: "1509 - 1547", death: "Organ failure linked to severe obesity and a chronically ulcerated, infected leg wound.", fact: "Infamous for his six marriages and breaking England away from the Catholic Church to launch the English Reformation." },
+        { name: "Edward VI", house: "Tudors", reign: "1547 - 1553", death: "Tuberculosis/severe lung infection at the tender age of 15.", fact: "Became king when he was just nine years old. He was England's first truly Protestant-born monarch." },
+        { name: "Mary I (Bloody Mary)", house: "Tudors", reign: "1553 - 1558", death: "Influenza during an epidemic, though she also suffered from suspected uterine cancer.", fact: "Attempted to violently reverse the Reformation by burning nearly 300 religious dissenters at the stake." },
+        { name: "Elizabeth I", house: "Tudors", reign: "1558 - 1603", death: "Blood poisoning, heavy depression, and old age. She refused to let doctors examine her or lie down in bed.", fact: "The 'Virgin Queen' who famously defeated the Spanish Armada and ushered in a golden literary age." },
+        { name: "James I", house: "Stuarts", reign: "1603 - 1625", death: "Severe dysentery and fainting fits combined with kidney failure brought on by a stroke.", fact: "Already King of Scotland as James VI, he united the English and Scottish crowns and commissioned the King James Bible." },
+        { name: "Charles I", house: "Stuarts", reign: "1625 - 1649", death: "Publicly beheaded outside Whitehall Palace following a conviction of high treason.", fact: "His absolute rule sparked the bloody English Civil War, resulting in the temporary abolition of the monarchy." },
+        { name: "Charles II", house: "Stuarts", reign: "1660 - 1685", death: "A sudden stroke (apoplexy), treated with bizarre medieval medicine including hot iron applications to his head.", fact: "Known as the 'Merry Monarch', his reign saw both the Great Plague and the Great Fire of London." },
+        { name: "James II", house: "Stuarts", reign: "1685 - 1688", death: "A massive brain hemorrhage while living in French exile long after his deposition.", fact: "The last Catholic monarch of England, he was deposed by his own daughter and son-in-law in the Glorious Revolution." },
+        { name: "William III & Mary II", house: "Stuarts / Orange", reign: "1689 - 1702", death: "William died of pneumonia following a broken collarbone when his horse tripped on a molehill; Mary died of smallpox in 1694.", fact: "Ruled jointly as co-monarchs after signing the English Bill of Rights, firmly bounding royal power to Parliament." },
+        { name: "Anne", house: "Stuarts", reign: "1702 - 1714", death: "Gout leading to an absolute physical collapse and systemic infection, accelerated by stroke-like symptoms.", fact: "The first monarch of a unified Great Britain following the Acts of Union; she endured 17 pregnancies with no surviving heirs." },
+        { name: "George I", house: "Hanoverians", reign: "1714 - 1727", death: "A sudden, paralytic stroke suffered while traveling in his native home of Hanover.", fact: "A German prince who inherited the throne via the Act of Settlement. He spoke minimal English, leading to the rise of the first Prime Minister." },
+        { name: "George III", house: "Hanoverians", reign: "1760 - 1820", death: "Pneumonia and systemic failure after decades of dealing with blindness, deafness, and porphyria-induced insanity.", fact: "Presided over the loss of the American colonies and the global victory over Napoleon at Waterloo." },
+        { name: "Victoria", house: "Hanoverians", reign: "1837 - 1901", death: "Old age and a series of minor strokes at Osborne House on the Isle of Wight.", fact: "Reigned at the absolute apex of the British Empire, presiding over massive industrial, cultural, and political changes." },
+        { name: "George V", house: "Windsor", reign: "1910 - 1936", death: "Euthanized with a lethal injection of morphine and cocaine on his deathbed to ensure a dignified morning newspaper announcement.", fact: "Changed the royal family name from Saxe-Coburg and Gotha to Windsor due to anti-German sentiment in World War I." },
+        { name: "Edward VIII", house: "Windsor", reign: "1936 - 1936", death: "Throat cancer in Paris, having lived much of his life as an international socialite in exile.", fact: "The only British monarch to voluntarily abdicate the throne, choosing marriage to American divorcee Wallis Simpson over the crown." },
+        { name: "Elizabeth II", house: "Windsor", reign: "1952 - 2022", death: "Advanced old age at Balmoral Castle.", fact: "The longest-reigning British monarch in history, serving on the throne for over 70 years." }
+    ];
+
+    let currentScore = 0;
+    let totalQuestions = 0;
+    let currentStreak = 0;
+    let activeQuestionData = {};
+
+    // Tab switcher navigation
+    function switchTab(target) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+
+        if(target === 'quiz') {
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            document.getElementById('quiz-panel').classList.add('active');
+        } else {
+            document.querySelectorAll('.tab-btn')[1].classList.add('active');
+            document.getElementById('explorer-panel').classList.add('active');
+        }
+    }
+
+    // Populate Explorer Dropdown on startup
+    function initExplorer() {
+        const select = document.getElementById('monarch-select');
+        select.innerHTML = '';
+        monarchsData.forEach((m, idx) => {
+            let opt = document.createElement('option');
+            opt.value = idx;
+            opt.innerText = m.name;
+            select.appendChild(opt);
+        });
+        loadDossier(0);
+    }
+
+    // Load selected profile into dossier view
+    function loadDossier(index) {
+        const item = monarchsData[index];
+        const card = document.getElementById('dossier-display');
+        card.innerHTML = `
+            <div class="dossier-row"><strong>Royal House:</strong> ${item.house}</div>
+            <div class="dossier-row"><strong>Years of Reign:</strong> ${item.reign}</div>
+            <div class="dossier-row"><strong>Cause of Death:</strong> ${item.death}</div>
+            <div class="dossier-row"><strong>Notable Fact:</strong> ${item.fact}</div>
+        `;
+    }
+
+    // Quiz Engine Engine
+    function generateQuestion() {
+        // Reset view states
+        document.getElementById('next-btn').style.display = 'none';
+        const feedback = document.getElementById('feedback-text');
+        feedback.className = 'feedback-box';
+        feedback.innerText = '';
+
+        // Pick a dynamic question archetype type (0 = Reign Dates, 1 = Cause of Death, 2 = Notable Fact)
+        const type = Math.floor(Math.random() * 3);
+        const subject = monarchsData[Math.floor(Math.random() * monarchsData.length)];
+        
+        let questionString = "";
+        let correctAnswer = "";
+        let distractorPool = [];
+
+        if (type === 0) {
+            questionString = `Which years mark the historic reign of ${subject.name}?`;
+            correctAnswer = subject.reign;
+            distractorPool = monarchsData.map(m => m.reign).filter(r => r !== correctAnswer);
+        } else if (type === 1) {
+            questionString = `How did ${subject.name} pass away?`;
+            correctAnswer = subject.death;
+            distractorPool = monarchsData.map(m => m.death).filter(d => d !== correctAnswer);
+        } else {
+            questionString = `Which monarch is associated with this famous historical fact?\n"${subject.fact}"`;
+            correctAnswer = subject.name;
+            distractorPool = monarchsData.map(m => m.name).filter(n => n !== correctAnswer);
+        }
+
+        // Randomly pull 3 wrong choices
+        distractorPool = [...new Set(distractorPool)]; // unique entries
+        shuffleArray(distractorPool);
+        let options = [correctAnswer, distractorPool[0], distractorPool[1], distractorPool[2]];
+        shuffleArray(options);
+
+        activeQuestionData = {
+            answer: correctAnswer,
+            fact: subject.fact,
+            name: subject.name
+        };
+
+        // Render to DOM
+        document.getElementById('question-text').innerText = questionString;
+        const optionsBox = document.getElementById('options-container');
+        optionsBox.innerHTML = '';
+
+        options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(btn, opt);
+            optionsBox.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selectedBtn, selectedText) {
+        // Disable choices immediately
+        document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+        
+        totalQuestions++;
+        const feedback = document.getElementById('feedback-text');
+        
+        if(selectedText === activeQuestionData.answer) {
+            selectedBtn.classList.add('correct');
+            currentScore++;
+            currentStreak++;
+            feedback.innerText = `Correct! Did you know? ${activeQuestionData.fact}`;
+            feedback.classList.add('show', 'correct-feed');
+        } else {
+            selectedBtn.classList.add('incorrect');
+            currentStreak = 0;
+            // Highlight right one
+            document.querySelectorAll('.option-btn').forEach(b => {
+                if(b.innerText === activeQuestionData.answer) b.classList.add('correct');
+            });
+            feedback.innerText = `Incorrect. The true match belonged to ${activeQuestionData.name}.`;
+            feedback.classList.add('show', 'incorrect-feed');
+        }
+
+        // Update tracking strings
+        document.getElementById('score-count').innerText = currentScore;
+        document.getElementById('total-count').innerText = totalQuestions;
+        document.getElementById('streak-count').innerText = currentStreak;
+
+        document.getElementById('next-btn').style.display = 'block';
+    }
+
+    // Quick array shuffle utility
+    function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+    }
+
+    // Startup
+    window.onload = () => {
+        initExplorer();
+        generateQuestion();
+    };
+</script>
+</body>
+</html>

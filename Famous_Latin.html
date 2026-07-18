@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Famous Latin Sayings</title>
+<style>
+body{font-family:Arial,sans-serif;background:#efe4c7;margin:0;padding:20px;text-align:center}
+#card{max-width:800px;margin:auto;background:#fff8e7;padding:25px;border-radius:12px;box-shadow:0 2px 8px #999}
+button{padding:10px 18px;margin:8px;font-size:16px}
+#latin{font-size:2em;font-weight:bold;margin:20px}
+#meaning,#history{display:none;margin-top:18px}
+</style>
+</head>
+<body>
+<div id="card">
+<h1>Famous Latin Sayings</h1>
+<div id="count"></div>
+<div id="latin"></div>
+<div id="meaning"></div>
+<div id="history"></div>
+<button onclick="reveal()">Reveal Meaning</button>
+<button onclick="nextCard()">Next</button>
+</div>
+<script>
+
+const latin=document.getElementById('latin');
+const meaning=document.getElementById('meaning');
+const history=document.getElementById('history');
+const count=document.getElementById('count');
+
+const data=[
+{latin:'Carpe diem',meaning:'Seize the day.',history:'Enjoy the present instead of worrying excessively about the future.'},
+{latin:'Veni, vidi, vici',meaning:'I came, I saw, I conquered.',history:"Julius Caesar's famous message after a swift victory."},
+{latin:'Cogito, ergo sum',meaning:'I think, therefore I am.',history:"Descartes' philosophical statement."},
+{latin:'Alea iacta est',meaning:'The die is cast.',history:'The decision has been made.'},
+{latin:'Ad astra per aspera',meaning:'Through hardships to the stars.',history:'Success comes through difficulty.'},
+{latin:'Amor vincit omnia',meaning:'Love conquers all.',history:'From the poet Virgil.'},
+{latin:'Ars longa, vita brevis',meaning:'Art is long; life is short.',history:'Mastery takes longer than a lifetime.'},
+{latin:'Cave canem',meaning:'Beware of the dog.',history:'Often seen on Roman mosaics.'},
+{latin:'Cui bono?',meaning:'Who benefits?',history:'Ask who gains from an event.'},
+{latin:'De gustibus non est disputandum',meaning:'There is no arguing about taste.',history:'People have different preferences.'},
+{latin:'Dum spiro spero',meaning:'While I breathe, I hope.',history:'Never give up hope.'},
+{latin:'Errare humanum est',meaning:'To err is human.',history:'Everyone makes mistakes.'},
+{latin:'Festina lente',meaning:'Make haste slowly.',history:"Be quick, but don't be careless."},
+{latin:'Fiat lux',meaning:'Let there be light.',history:'From Genesis.'},
+{latin:'Fortuna favet fortibus',meaning:'Fortune favours the brave.',history:'Courage is often rewarded.'},
+{latin:'Homo homini lupus',meaning:'Man is a wolf to man.',history:'People can be cruel to one another.'},
+{latin:'In vino veritas',meaning:'In wine, there is truth.',history:'People often speak honestly after drinking.'},
+{latin:'Ipso facto',meaning:'By the fact itself.',history:'Automatically, because of the fact.'},
+{latin:'Memento mori',meaning:'Remember that you must die.',history:'A reminder to live wisely.'},
+{latin:'Mens sana in corpore sano',meaning:'A healthy mind in a healthy body.',history:'Mental and physical health belong together.'},
+{latin:'Noli me tangere',meaning:'Do not touch me.',history:'A biblical phrase.'},
+{latin:'Panem et circenses',meaning:'Bread and circuses.',history:'Keeping people distracted with entertainment.'},
+{latin:'Per aspera ad astra',meaning:'Through hardships to the stars.',history:'Another famous version of the same proverb.'},
+{latin:'Quid pro quo',meaning:'Something for something.',history:'An exchange of favours.'},
+{latin:'Sic transit gloria mundi',meaning:'Thus passes the glory of the world.',history:'Fame is temporary.'},
+{latin:'Tempus fugit',meaning:'Time flies.',history:'Life passes quickly.'},
+{latin:'Verba volant, scripta manent',meaning:'Spoken words fly away; written words remain.',history:'Writing lasts.'},
+{latin:'Vox populi, vox Dei',meaning:'The voice of the people is the voice of God.',history:'Public opinion carries weight.'},
+{latin:'Audi alteram partem',meaning:'Hear the other side.',history:'Listen before judging.'},
+{latin:'Calculo albo notare',meaning:'To mark with a white stone.',history:'Romans marked fortunate days with a white pebble and unfortunate days with a black pebble.'}
+,{latin:'Ab imo pectore',meaning:'From the bottom of my heart.',history:'A sincere expression of deep feeling.'}
+,{latin:'Absit iniuria verbis',meaning:'No offence intended.',history:'A polite disclaimer before frank speech.'}
+,{latin:'Acta non verba',meaning:'Deeds, not words.',history:'Actions matter more than promises.'}
+,{latin:'Ad fontes',meaning:'To the sources.',history:'Humanist call to return to original texts.'}
+,{latin:'Ad infinitum',meaning:'To infinity; without end.',history:'Continuing endlessly.'}
+,{latin:'Ad libitum',meaning:'At one’s pleasure.',history:'Freely or as desired.'}
+,{latin:'Bis dat qui cito dat',meaning:'He gives twice who gives promptly.',history:'Timely help is especially valuable.'}
+,{latin:'Cor ad cor loquitur',meaning:'Heart speaks to heart.',history:'True understanding is personal.'}
+,{latin:'Divide et impera',meaning:'Divide and rule.',history:'A strategy of maintaining power.'}
+,{latin:'Docendo discimus',meaning:'By teaching, we learn.',history:'Teaching deepens understanding.'}
+,{latin:'Dura lex, sed lex',meaning:'The law is harsh, but it is the law.',history:'Laws apply even when severe.'}
+,{latin:'Ex nihilo nihil fit',meaning:'Nothing comes from nothing.',history:'Everything has a cause or origin.'}
+,{latin:'Facta, non verba',meaning:'Deeds, not words.',history:'Judge people by actions.'}
+,{latin:'Faber est suae quisque fortunae',meaning:'Every man is the architect of his own fortune.',history:'We shape our own destiny.'}
+,{latin:'Labor omnia vincit',meaning:'Hard work conquers all.',history:'From Virgil.'}
+,{latin:'Lupus in fabula',meaning:'Speak of the wolf.',history:'Equivalent to "Speak of the devil."'}
+,{latin:'Magna cum laude',meaning:'With great praise.',history:'Academic distinction.'}
+,{latin:'Nil desperandum',meaning:'Never despair.',history:'Maintain hope in adversity.'}
+,{latin:'Non ducor, duco',meaning:'I am not led; I lead.',history:'A motto of leadership.'}
+,{latin:'Non scholae sed vitae discimus',meaning:'We learn not for school but for life.',history:'Education should serve life.'}
+,{latin:'Nulla dies sine linea',meaning:'No day without a line.',history:'Practise your craft every day.'}
+,{latin:'Omnia vincit amor',meaning:'Love conquers all.',history:'Another famous wording from Virgil.'}
+,{latin:'Ora et labora',meaning:'Pray and work.',history:'Motto of the Benedictines.'}
+,{latin:'Pecunia non olet',meaning:'Money does not smell.',history:'Money has no moral scent.'}
+,{latin:'Quo vadis?',meaning:'Where are you going?',history:'A famous biblical and literary phrase.'}
+,{latin:'Sapere aude',meaning:'Dare to know.',history:'Motto of the Enlightenment.'}
+,{latin:'Semper fidelis',meaning:'Always faithful.',history:'A traditional motto of loyalty.'}
+,{latin:'Si vis pacem, para bellum',meaning:'If you want peace, prepare for war.',history:'Strength may deter conflict.'}
+,{latin:'Ubi concordia, ibi victoria',meaning:'Where there is unity, there is victory.',history:'Success comes through cooperation.'}
+,{latin:'Veritas vos liberabit',meaning:'The truth will set you free.',history:'From the Gospel of John.'}
+
+];
+function shuffle(a){
+ for(let j=a.length-1;j>0;j--){
+   const k=Math.floor(Math.random()*(j+1));
+   [a[j],a[k]]=[a[k],a[j]];
+ }
+}
+shuffle(data);
+let i=0;
+function show(){
+count.textContent=`Phrase ${i+1} of ${data.length}`;
+latin.textContent=data[i].latin;
+meaning.style.display='none';
+history.style.display='none';
+meaning.innerHTML='<h3>Meaning</h3>'+data[i].meaning;
+history.innerHTML='<h3>Background</h3>'+data[i].history;
+}
+function reveal(){
+meaning.style.display='block';
+history.style.display='block';
+}
+function nextCard(){
+if(i===data.length-1){shuffle(data);i=0;}else{i++;}
+show();
+}
+show();
+</script>
+</body>
+</html>

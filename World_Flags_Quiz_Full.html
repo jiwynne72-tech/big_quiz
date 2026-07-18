@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>World Flags Quiz</title>
+<style>
+body{font-family:Arial;background:#114b8b;color:#fff;margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh}
+#card{background:#1d6fbe;padding:20px;border-radius:15px;max-width:700px;width:95%%;text-align:center}
+.flag{font-size:96px;line-height:1.2}
+button{width:100%%;padding:14px;margin:8px 0;font-size:20px;border:none;border-radius:10px}
+.correct{background:#2ecc71;color:#fff}.wrong{background:#e74c3c;color:#fff}#next{display:none;background:#f39c12;color:#fff}
+</style></head><body><div id="card"></div>
+<script>
+const EASY=[["🇮🇹", "Italy", "Europe"], ["🇫🇷", "France", "Europe"], ["🇩🇪", "Germany", "Europe"], ["🇪🇸", "Spain", "Europe"], ["🇬🇧", "United Kingdom", "Europe"], ["🇮🇪", "Ireland", "Europe"], ["🇺🇸", "United States", "North America"], ["🇨🇦", "Canada", "North America"], ["🇲🇽", "Mexico", "North America"], ["🇧🇷", "Brazil", "South America"], ["🇦🇷", "Argentina", "South America"], ["🇯🇵", "Japan", "Asia"], ["🇨🇳", "China", "Asia"], ["🇮🇳", "India", "Asia"], ["🇰🇷", "South Korea", "Asia"], ["🇦🇺", "Australia", "Oceania"], ["🇳🇿", "New Zealand", "Oceania"], ["🇿🇦", "South Africa", "Africa"], ["🇪🇬", "Egypt", "Africa"], ["🇵🇹", "Portugal", "Europe"]];
+const HARD=[["🇮🇹", "Italy", "Europe"], ["🇫🇷", "France", "Europe"], ["🇩🇪", "Germany", "Europe"], ["🇪🇸", "Spain", "Europe"], ["🇬🇧", "United Kingdom", "Europe"], ["🇮🇪", "Ireland", "Europe"], ["🇺🇸", "United States", "North America"], ["🇨🇦", "Canada", "North America"], ["🇲🇽", "Mexico", "North America"], ["🇧🇷", "Brazil", "South America"], ["🇦🇷", "Argentina", "South America"], ["🇯🇵", "Japan", "Asia"], ["🇨🇳", "China", "Asia"], ["🇮🇳", "India", "Asia"], ["🇰🇷", "South Korea", "Asia"], ["🇦🇺", "Australia", "Oceania"], ["🇳🇿", "New Zealand", "Oceania"], ["🇿🇦", "South Africa", "Africa"], ["🇪🇬", "Egypt", "Africa"], ["🇵🇹", "Portugal", "Europe"], ["🇸🇮", "Slovenia", "Europe"], ["🇸🇰", "Slovakia", "Europe"], ["🇱🇹", "Lithuania", "Europe"], ["🇱🇻", "Latvia", "Europe"], ["🇪🇪", "Estonia", "Europe"], ["🇲🇰", "North Macedonia", "Europe"], ["🇰🇿", "Kazakhstan", "Asia"], ["🇲🇳", "Mongolia", "Asia"], ["🇺🇾", "Uruguay", "South America"], ["🇧🇼", "Botswana", "Africa"], ["🇳🇵", "Nepal", "Asia"], ["🇰🇭", "Cambodia", "Asia"], ["🇱🇦", "Laos", "Asia"], ["🇦🇱", "Albania", "Europe"], ["🇬🇪", "Georgia", "Asia/Europe"]];
+let data=[],i=0,score=0,streak=0,best=0;
+const sh=a=>{for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}};
+function home(){card.innerHTML=`<h1>🌍 World Flags Quiz</h1><button onclick="start('easy')">🟢 Easy</button><button onclick="start('hard')">🔴 Hard</button>`;}
+function start(level){data=(level==="easy"?EASY:HARD).map(x=>({flag:x[0],correct:x[1],fact:"Continent: "+x[2]}));const names=data.map(d=>d.correct);data.forEach(d=>{let o=[d.correct];while(o.length<3){let n=names[Math.floor(Math.random()*names.length)];if(!o.includes(n))o.push(n)}sh(o);d.options=o});sh(data);i=0;score=0;streak=0;best=0;show();}
+function show(){let q=data[i];card.innerHTML=`<h3>Score ${score}/${i} | 🔥 ${streak}</h3><div class="flag">${q.flag}</div><h2>Which country is this?</h2><div id="ans"></div><p id="fact"></p><button id="next" onclick="nextQ()">Next ▶</button>`;q.options.forEach(o=>{let b=document.createElement("button");b.textContent=o;b.onclick=()=>answer(b,o,q);ans.appendChild(b);});}
+function answer(b,o,q){[...ans.children].forEach(x=>x.disabled=true);if(o===q.correct){b.className="correct";score++;streak++;best=Math.max(best,streak);}else{b.className="wrong";streak=0;[...ans.children].forEach(x=>{if(x.textContent===q.correct)x.className="correct";});}fact.textContent=q.fact;next.style.display="block";}
+function nextQ(){i++;if(i>=data.length){card.innerHTML=`<h1>Finished!</h1><h2>${score}/${data.length}</h2><p>Best streak: ${best}</p><button onclick="home()">Play Again</button>`;}else show();}
+home();
+</script></body></html>

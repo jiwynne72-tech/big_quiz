@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mental Math Refresher Game</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:900px;margin:20px auto;padding:20px;line-height:1.5}
+.card{border:1px solid #ccc;border-radius:10px;padding:16px;margin:12px 0}
+button{padding:8px 12px;margin:4px}
+.hidden{display:none}
+.correct{color:green;font-weight:bold}
+.incorrect{color:#b00020;font-weight:bold}
+</style>
+</head>
+<body>
+<h1>Mental Math Refresher</h1>
+<p>20 exercises covering fractions, roots, exponents, percentages, and order of operations. Try mentally first, then reveal the explanation.</p>
+<div id="quiz"></div>
+<p><strong>Score:</strong> <span id="score">0</span>/20</p>
+
+<script>
+const questions = [
+{q:"1/2 + 1/4", a:"3/4", e:"Convert 1/2 to 2/4. Then 2/4 + 1/4 = 3/4."},
+{q:"3/4 - 1/2", a:"1/4", e:"1/2 = 2/4. Then 3/4 - 2/4 = 1/4."},
+{q:"2/3 × 3/4", a:"1/2", e:"Multiply top and bottom: 6/12 = 1/2."},
+{q:"(1/2) ÷ (1/4)", a:"2", e:"Dividing by 1/4 means multiplying by 4."},
+{q:"5/8 + 1/8", a:"3/4", e:"6/8 simplifies to 3/4."},
+{q:"7/10 - 2/10", a:"1/2", e:"5/10 simplifies to 1/2."},
+{q:"√49", a:"7", e:"7 × 7 = 49."},
+{q:"√81", a:"9", e:"9 × 9 = 81."},
+{q:"√(1/4)", a:"1/2", e:"The square root of 1 and 4 gives 1/2."},
+{q:"2³", a:"8", e:"2 × 2 × 2 = 8."},
+{q:"3²", a:"9", e:"3 × 3 = 9."},
+{q:"10²", a:"100", e:"10 × 10 = 100."},
+{q:"2⁴ ÷ 2²", a:"4", e:"Subtract exponents: 2^(4-2)=2²=4."},
+{q:"5 × 20%", a:"1", e:"20% = 0.2. Then 5 × 0.2 = 1."},
+{q:"25% of 80", a:"20", e:"25% is one quarter. A quarter of 80 is 20."},
+{q:"50% of 34", a:"17", e:"50% means half."},
+{q:"3 + 4 × 2", a:"11", e:"Multiplication first: 4×2=8, then +3."},
+{q:"(3 + 4) × 2", a:"14", e:"Parentheses first: 7×2=14."},
+{q:"1.5 + 0.5", a:"2", e:"Tenths add to 2 whole units."},
+{q:"1000 ÷ 10³", a:"1", e:"10³ = 1000, so 1000÷1000=1."}
+];
+
+let score = 0;
+const quiz = document.getElementById("quiz");
+
+questions.forEach((item, idx) => {
+  const div = document.createElement("div");
+  div.className = "card";
+  div.innerHTML = `
+    <h3>Exercise ${idx+1}</h3>
+    <p><strong>${item.q}</strong></p>
+    <input id="ans${idx}" placeholder="Your answer">
+    <button onclick="check(${idx})">Check</button>
+    <button onclick="toggleExp(${idx})">Show Explanation</button>
+    <div id="result${idx}"></div>
+    <div id="exp${idx}" class="hidden"><em>${item.e}</em><br><strong>Answer:</strong> ${item.a}</div>
+  `;
+  quiz.appendChild(div);
+});
+
+window.check = function(i){
+  const user = document.getElementById("ans"+i).value.trim().toLowerCase();
+  const res = document.getElementById("result"+i);
+  if(res.dataset.done) return;
+  if(user === questions[i].a.toLowerCase()){
+    score++;
+    document.getElementById("score").textContent = score;
+    res.className="correct";
+    res.textContent="Correct!";
+  } else {
+    res.className="incorrect";
+    res.textContent="Not quite.";
+  }
+  res.dataset.done = "1";
+}
+
+window.toggleExp = function(i){
+  document.getElementById("exp"+i).classList.toggle("hidden");
+}
+</script>
+</body>
+</html>

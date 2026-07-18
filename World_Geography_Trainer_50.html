@@ -1,0 +1,175 @@
+<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Trainer</title><style>body{background:#114b8b;color:#fff;font-family:Arial;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0}#card{background:#1d6fbe;padding:20px;border-radius:15px;width:92%;max-width:760px;text-align:center}.flag{font-size:90px}button{padding:12px 20px;margin:8px;font-size:18px}#info{text-align:left;margin-top:12px}</style></head><body><div id='card'><h2>🌍 World Geography Trainer</h2><div id='p'></div><div id='f' class='flag'></div><button id='r'>Reveal</button><button id='n'>Next</button><div id='info'></div></div><script>const data=[{"flag": "🇮🇹", "country": "Italy", "capital": "Rome", "continent": "Europe", "currency": "Euro (EUR)", "language": "Italian", "borders": "France, Switzerland, Austria, Slovenia, San Marino, Vatican City", "seas": "Ligurian, Tyrrhenian, Adriatic & Ionian Seas", "fact": "Contains two independent states."}, {"flag": "🇫🇷", "country": "France", "capital": "Paris", "continent": "Europe", "currency": "Euro (EUR)", "language": "French", "borders": "Belgium, Luxembourg, Germany, Switzerland, Italy, Spain", "seas": "Atlantic & Mediterranean", "fact": "Home of the Eiffel Tower."}, {"flag": "🇩🇪", "country": "Germany", "capital": "Berlin", "continent": "Europe", "currency": "Euro (EUR)", "language": "German", "borders": "Denmark, Poland, Czechia, Austria, Switzerland, France, Luxembourg, Belgium, Netherlands", "seas": "North & Baltic Seas", "fact": "Known for the Autobahn."}, {"flag": "🇪🇸", "country": "Spain", "capital": "Madrid", "continent": "Europe", "currency": "Euro (EUR)", "language": "Spanish", "borders": "Portugal, France, Andorra", "seas": "Atlantic & Mediterranean", "fact": "Home of the Sagrada Família."}, {"flag": "🇵🇹", "country": "Portugal", "capital": "Lisbon", "continent": "Europe", "currency": "Euro (EUR)", "language": "Portuguese", "borders": "Spain", "seas": "Atlantic Ocean", "fact": "Age of Discovery."}, 
+{
+"flag":"🇸🇪",
+"country":"Sweden",
+"capital":"Stockholm",
+"continent":"Europe",
+"currency":"Swedish krona (SEK)",
+"language":"Swedish",
+"borders":"Norway, Finland",
+"seas":"Baltic Sea",
+"fact":"Home of the Nobel Prize."
+},
+{
+"flag":"🇳🇴",
+"country":"Norway",
+"capital":"Oslo",
+"continent":"Europe",
+"currency":"Norwegian krone (NOK)",
+"language":"Norwegian",
+"borders":"Sweden, Finland, Russia",
+"seas":"North Sea, Norwegian Sea, Barents Sea",
+"fact":"Famous for its fjords."
+},
+{
+"flag":"🇫🇮",
+"country":"Finland",
+"capital":"Helsinki",
+"continent":"Europe",
+"currency":"Euro (EUR)",
+"language":"Finnish, Swedish",
+"borders":"Sweden, Norway, Russia",
+"seas":"Baltic Sea",
+"fact":"Known as the Land of a Thousand Lakes."
+},
+{
+"flag":"🇩🇰",
+"country":"Denmark",
+"capital":"Copenhagen",
+"continent":"Europe",
+"currency":"Danish krone (DKK)",
+"language":"Danish",
+"borders":"Germany",
+"seas":"North Sea, Baltic Sea",
+"fact":"Home of LEGO."
+},
+{
+"flag":"🇮🇸",
+"country":"Iceland",
+"capital":"Reykjavík",
+"continent":"Europe",
+"currency":"Icelandic króna (ISK)",
+"language":"Icelandic",
+"borders":"None",
+"seas":"North Atlantic Ocean",
+"fact":"Powered largely by geothermal energy."
+},
+{
+"flag":"🇷🇴",
+"country":"Romania",
+"capital":"Bucharest",
+"continent":"Europe",
+"currency":"Romanian leu (RON)",
+"language":"Romanian",
+"borders":"Hungary, Serbia, Bulgaria, Ukraine, Moldova",
+"seas":"Black Sea",
+"fact":"Home of Transylvania."
+},
+{
+"flag":"🇧🇬",
+"country":"Bulgaria",
+"capital":"Sofia",
+"continent":"Europe",
+"currency":"Bulgarian lev (BGN)",
+"language":"Bulgarian",
+"borders":"Romania, Serbia, North Macedonia, Greece, Türkiye",
+"seas":"Black Sea",
+"fact":"One of Europe's oldest countries."
+},
+{
+"flag":"🇭🇷",
+"country":"Croatia",
+"capital":"Zagreb",
+"continent":"Europe",
+"currency":"Euro (EUR)",
+"language":"Croatian",
+"borders":"Slovenia, Hungary, Serbia, Bosnia and Herzegovina, Montenegro",
+"seas":"Adriatic Sea",
+"fact":"Dubrovnik featured in Game of Thrones."
+},
+{
+"flag":"🇷🇸",
+"country":"Serbia",
+"capital":"Belgrade",
+"continent":"Europe",
+"currency":"Serbian dinar (RSD)",
+"language":"Serbian",
+"borders":"Hungary, Romania, Bulgaria, North Macedonia, Croatia, Bosnia and Herzegovina, Montenegro, Kosovo",
+"seas":"Landlocked",
+"fact":"Belgrade is one of Europe's oldest cities."
+},
+{
+"flag":"🇸🇮",
+"country":"Slovenia",
+"capital":"Ljubljana",
+"continent":"Europe",
+"currency":"Euro (EUR)",
+"language":"Slovene",
+"borders":"Italy, Austria, Hungary, Croatia",
+"seas":"Adriatic Sea",
+"fact":"Over half the country is forest."
+},
+{
+"flag":"🇸🇰",
+"country":"Slovakia",
+"capital":"Bratislava",
+"continent":"Europe",
+"currency":"Euro (EUR)",
+"language":"Slovak",
+"borders":"Czechia, Austria, Hungary, Ukraine, Poland",
+"seas":"Landlocked",
+"fact":"Bratislava borders two countries."
+},
+{
+"flag":"🇱🇹",
+"country":"Lithuania",
+"capital":"Vilnius",
+"continent":"Europe",
+"currency":"Euro (EUR)",
+"language":"Lithuanian",
+"borders":"Latvia, Belarus, Poland, Russia",
+"seas":"Baltic Sea",
+"fact":"Last European nation to adopt Christianity."
+},
+{
+"flag":"🇱🇻",
+"country":"Latvia",
+"capital":"Riga",
+"continent":"Europe",
+"currency":"Euro (EUR)",
+"language":"Latvian",
+"borders":"Estonia, Lithuania, Belarus, Russia",
+"seas":"Baltic Sea",
+"fact":"Riga has one of Europe's largest Art Nouveau districts."
+},
+{
+"flag":"🇪🇪",
+"country":"Estonia",
+"capital":"Tallinn",
+"continent":"Europe",
+"currency":"Euro (EUR)",
+"language":"Estonian",
+"borders":"Latvia, Russia",
+"seas":"Baltic Sea",
+"fact":"One of the world's most digital societies."
+},
+{
+"flag":"🇺🇦",
+"country":"Ukraine",
+"capital":"Kyiv",
+"continent":"Europe",
+"currency":"Hryvnia (UAH)",
+"language":"Ukrainian",
+"borders":"Poland, Slovakia, Hungary, Romania, Moldova, Belarus, Russia",
+"seas":"Black Sea, Sea of Azov",
+"fact":"Europe's largest country by area entirely within Europe."
+},
+
+{"flag": "🇬🇧", "country": "United Kingdom", "capital": "London", "continent": "Europe", "currency": "Pound (GBP)", "language": "English", "borders": "Ireland", "seas": "Atlantic & North Sea", "fact": "Four nations."}, {"flag": "🇮🇪", "country": "Ireland", "capital": "Dublin", "continent": "Europe", "currency": "Euro (EUR)", "language": "Irish, English", "borders": "United Kingdom", "seas": "Atlantic", "fact": "Emerald Isle."}, {"flag": "🇳🇱", "country": "Netherlands", "capital": "Amsterdam", "continent": "Europe", "currency": "Euro", "language": "Dutch", "borders": "Belgium, Germany", "seas": "North Sea", "fact": "Windmills."}, {"flag": "🇧🇪", "country": "Belgium", "capital": "Brussels", "continent": "Europe", "currency": "Euro", "language": "Dutch, French, German", "borders": "France, Netherlands, Germany, Luxembourg", "seas": "North Sea", "fact": "EU HQ."}, {"flag": "🇨🇭", "country": "Switzerland", "capital": "Bern", "continent": "Europe", "currency": "Swiss franc", "language": "German, French, Italian, Romansh", "borders": "France, Germany, Austria, Liechtenstein, Italy", "seas": "Landlocked", "fact": "Alps."}, {"flag": "🇦🇹", "country": "Austria", "capital": "Vienna", "continent": "Europe", "currency": "Euro", "language": "German", "borders": "Germany, Czechia, Slovakia, Hungary, Slovenia, Italy, Switzerland, Liechtenstein", "seas": "Landlocked", "fact": "Mozart."}, {"flag": "🇵🇱", "country": "Poland", "capital": "Warsaw", "continent": "Europe", "currency": "Złoty", "language": "Polish", "borders": "Germany, Czechia, Slovakia, Ukraine, Belarus, Lithuania, Russia", "seas": "Baltic Sea", "fact": "Medieval castles."}, {"flag": "🇨🇿", "country": "Czechia", "capital": "Prague", "continent": "Europe", "currency": "Koruna", "language": "Czech", "borders": "Germany, Poland, Slovakia, Austria", "seas": "Landlocked", "fact": "Prague Castle."}, {"flag": "🇭🇺", "country": "Hungary", "capital": "Budapest", "continent": "Europe", "currency": "Forint", "language": "Hungarian", "borders": "Austria, Slovakia, Ukraine, Romania, Serbia, Croatia, Slovenia", "seas": "Landlocked", "fact": "Danube."}, {"flag": "🇬🇷", "country": "Greece", "capital": "Athens", "continent": "Europe", "currency": "Euro", "language": "Greek", "borders": "Albania, North Macedonia, Bulgaria, Türkiye", "seas": "Aegean, Ionian, Mediterranean", "fact": "Birthplace of democracy."}, {"flag": "🇺🇸", "country": "United States", "capital": "Washington, D.C.", "continent": "North America", "currency": "US dollar", "language": "English", "borders": "Canada, Mexico", "seas": "Atlantic, Pacific, Arctic", "fact": "50 states."}, {"flag": "🇨🇦", "country": "Canada", "capital": "Ottawa", "continent": "North America", "currency": "Canadian dollar", "language": "English, French", "borders": "United States", "seas": "Atlantic, Pacific, Arctic", "fact": "2nd largest."}, {"flag": "🇲🇽", "country": "Mexico", "capital": "Mexico City", "continent": "North America", "currency": "Peso", "language": "Spanish", "borders": "USA, Guatemala, Belize", "seas": "Pacific, Gulf, Caribbean", "fact": "Chichén Itzá."}, {"flag": "🇨🇺", "country": "Cuba", "capital": "Havana", "continent": "North America", "currency": "Cuban peso", "language": "Spanish", "borders": "None", "seas": "Caribbean", "fact": "Largest Caribbean island."}, {"flag": "🇯🇲", "country": "Jamaica", "capital": "Kingston", "continent": "North America", "currency": "Jamaican dollar", "language": "English", "borders": "None", "seas": "Caribbean", "fact": "Reggae."}, {"flag": "🇧🇷", "country": "Brazil", "capital": "Brasília", "continent": "South America", "currency": "Real", "language": "Portuguese", "borders": "Most South American countries", "seas": "Atlantic", "fact": "Amazon."}, {"flag": "🇦🇷", "country": "Argentina", "capital": "Buenos Aires", "continent": "South America", "currency": "Peso", "language": "Spanish", "borders": "Chile, Bolivia, Paraguay, Brazil, Uruguay", "seas": "Atlantic", "fact": "Tango."}, {"flag": "🇨🇱", "country": "Chile", "capital": "Santiago", "continent": "South America", "currency": "Peso", "language": "Spanish", "borders": "Peru, Bolivia, Argentina", "seas": "Pacific", "fact": "Long coastline."}, {"flag": "🇵🇪", "country": "Peru", "capital": "Lima", "continent": "South America", "currency": "Sol", "language": "Spanish", "borders": "Ecuador, Colombia, Brazil, Bolivia, Chile", "seas": "Pacific", "fact": "Machu Picchu."}, {"flag": "🇨🇴", "country": "Colombia", "capital": "Bogotá", "continent": "South America", "currency": "Peso", "language": "Spanish", "borders": "Panama, Venezuela, Brazil, Peru, Ecuador", "seas": "Pacific & Caribbean", "fact": "Two oceans."}, {"flag": "🇯🇵", "country": "Japan", "capital": "Tokyo", "continent": "Asia", "currency": "Yen", "language": "Japanese", "borders": "None", "seas": "Pacific & Sea of Japan", "fact": "Island nation."}, {"flag": "🇨🇳", "country": "China", "capital": "Beijing", "continent": "Asia", "currency": "Yuan", "language": "Mandarin", "borders": "14 countries", "seas": "Pacific", "fact": "Most populous."}, {"flag": "🇮🇳", "country": "India", "capital": "New Delhi", "continent": "Asia", "currency": "Rupee", "language": "Hindi, English", "borders": "Pakistan, China, Nepal, Bhutan, Bangladesh, Myanmar", "seas": "Indian Ocean", "fact": "Largest democracy."}, {"flag": "🇰🇷", "country": "South Korea", "capital": "Seoul", "continent": "Asia", "currency": "Won", "language": "Korean", "borders": "North Korea", "seas": "Yellow Sea & Sea of Japan", "fact": "K-pop."}, {"flag": "🇹🇭", "country": "Thailand", "capital": "Bangkok", "continent": "Asia", "currency": "Baht", "language": "Thai", "borders": "Myanmar, Laos, Cambodia, Malaysia", "seas": "Andaman & Gulf", "fact": "Never colonised."}, {"flag": "🇻🇳", "country": "Vietnam", "capital": "Hanoi", "continent": "Asia", "currency": "Dong", "language": "Vietnamese", "borders": "China, Laos, Cambodia", "seas": "South China Sea", "fact": "S-shaped."}, {"flag": "🇸🇬", "country": "Singapore", "capital": "Singapore", "continent": "Asia", "currency": "Singapore dollar", "language": "English, Malay, Mandarin, Tamil", "borders": "None", "seas": "Singapore Strait", "fact": "City-state."}, {"flag": "🇮🇩", "country": "Indonesia", "capital": "Jakarta", "continent": "Asia", "currency": "Rupiah", "language": "Indonesian", "borders": "Malaysia, PNG, Timor-Leste", "seas": "Indian & Pacific", "fact": "Largest archipelago."}, {"flag": "🇳🇵", "country": "Nepal", "capital": "Kathmandu", "continent": "Asia", "currency": "Nepalese rupee", "language": "Nepali", "borders": "China, India", "seas": "Landlocked", "fact": "Unique flag."}, {"flag": "🇸🇦", "country": "Saudi Arabia", "capital": "Riyadh", "continent": "Asia", "currency": "Riyal", "language": "Arabic", "borders": "Jordan, Iraq, Kuwait, Qatar, UAE, Oman, Yemen", "seas": "Red Sea & Gulf", "fact": "Largest Arabian state."}, {"flag": "🇦🇺", "country": "Australia", "capital": "Canberra", "continent": "Oceania", "currency": "Australian dollar", "language": "English", "borders": "None", "seas": "Indian & Pacific", "fact": "Smallest continent."}, {"flag": "🇳🇿", "country": "New Zealand", "capital": "Wellington", "continent": "Oceania", "currency": "NZ dollar", "language": "English, Māori", "borders": "None", "seas": "Pacific", "fact": "Kiwi."}, {"flag": "🇫🇯", "country": "Fiji", "capital": "Suva", "continent": "Oceania", "currency": "Fijian dollar", "language": "English, Fijian", "borders": "None", "seas": "Pacific", "fact": "300+ islands."}, {"flag": "🇵🇬", "country": "Papua New Guinea", "capital": "Port Moresby", "continent": "Oceania", "currency": "Kina", "language": "English, Tok Pisin, Hiri Motu", "borders": "Indonesia", "seas": "Pacific", "fact": "800+ languages."}, {"flag": "🇿🇦", "country": "South Africa", "capital": "Pretoria", "continent": "Africa", "currency": "Rand", "language": "11 official languages", "borders": "Namibia, Botswana, Zimbabwe, Mozambique, Eswatini", "seas": "Atlantic & Indian", "fact": "Three capitals."}, {"flag": "🇪🇬", "country": "Egypt", "capital": "Cairo", "continent": "Africa", "currency": "Egyptian pound", "language": "Arabic", "borders": "Libya, Sudan, Israel", "seas": "Mediterranean & Red Sea", "fact": "Pyramids."}, {"flag": "🇰🇪", "country": "Kenya", "capital": "Nairobi", "continent": "Africa", "currency": "Shilling", "language": "Swahili, English", "borders": "Uganda, Tanzania, Ethiopia, Somalia, South Sudan", "seas": "Indian", "fact": "Safari."}, {"flag": "🇹🇿", "country": "Tanzania", "capital": "Dodoma", "continent": "Africa", "currency": "Shilling", "language": "Swahili, English", "borders": "Kenya, Uganda, Rwanda, Burundi, DRC, Zambia, Malawi, Mozambique", "seas": "Indian", "fact": "Kilimanjaro."}, {"flag": "🇳🇬", "country": "Nigeria", "capital": "Abuja", "continent": "Africa", "currency": "Naira", "language": "English", "borders": "Niger, Chad, Cameroon, Benin", "seas": "Atlantic", "fact": "Largest African population."}, {"flag": "🇲🇦", "country": "Morocco", "capital": "Rabat", "continent": "Africa", "currency": "Dirham", "language": "Arabic", "borders": "Algeria", "seas": "Atlantic & Mediterranean", "fact": "Gateway to Africa."}, {"flag": "🇩🇿", "country": "Algeria", "capital": "Algiers", "continent": "Africa", "currency": "Dinar", "language": "Arabic", "borders": "Tunisia, Libya, Niger, Mali, Mauritania, Morocco", "seas": "Mediterranean", "fact": "Largest African country."}, {"flag": "🇪🇹", "country": "Ethiopia", "capital": "Addis Ababa", "continent": "Africa", "currency": "Birr", "language": "Amharic", "borders": "Eritrea, Djibouti, Somalia, Kenya, South Sudan, Sudan", "seas": "Landlocked", "fact": "Never fully colonised."}, {"flag": "🇧🇼", "country": "Botswana", "capital": "Gaborone", "continent": "Africa", "currency": "Pula", "language": "English, Tswana", "borders": "Namibia, Zambia, Zimbabwe, South Africa", "seas": "Landlocked", "fact": "Okavango Delta."}, {"flag": "🇬🇭", "country": "Ghana", "capital": "Accra", "continent": "Africa", "currency": "Cedi", "language": "English", "borders": "Côte d'Ivoire, Burkina Faso, Togo", "seas": "Atlantic", "fact": "Gold Coast."}, {"flag": "🇲🇬", "country": "Madagascar", "capital": "Antananarivo", "continent": "Africa", "currency": "Ariary", "language": "Malagasy, French", "borders": "None", "seas": "Indian Ocean", "fact": "Huge island."}];
+function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+shuffle(data);let idx=0;
+const p=document.getElementById('p'),f=document.getElementById('f'),info=document.getElementById('info');
+function show(){p.textContent='Country '+(idx+1)+' of '+data.length;f.textContent=data[idx].flag;info.innerHTML='';}
+document.getElementById('r').onclick=()=>{let d=data[idx];info.innerHTML='<b>'+d.country+'</b><br>🏛️ '+d.capital+'<br>🌍 '+d.continent+'<br>💰 '+d.currency+'<br>🗣️ '+d.language+'<br>🤝 '+d.borders+'<br>🌊 '+d.seas+'<br><br><i>'+d.fact+'</i>';}
+document.getElementById('n').onclick=()=>{idx=(idx+1)%data.length;if(idx===0)shuffle(data);show();}
+show();</script></body></html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Bard's Quiz: Shakespeare & His Works</title>
+    <style>
+        :root {
+            --burgundy: #6b1d2f;
+            --gold: #d4af37;
+            --cream: #fdfbf7;
+            --charcoal: #2b2b2b;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background-color: var(--cream);
+            color: var(--charcoal);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            max-width: 600px;
+            width: 100%;
+            border: 2px solid var(--burgundy);
+        }
+
+        h1 {
+            color: var(--burgundy);
+            text-align: center;
+            margin-top: 0;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 10px;
+        }
+
+        .score-board {
+            text-align: right;
+            font-weight: bold;
+            color: var(--burgundy);
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .btn {
+            background-color: white;
+            border: 2px solid var(--charcoal);
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover:not([disabled]) {
+            background-color: #f0eae1;
+            border-color: var(--burgundy);
+        }
+
+        .btn[disabled] {
+            cursor: not-allowed;
+        }
+
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #28a745 !important;
+            color: #155724;
+        }
+
+        .wrong {
+            background-color: #f8d7da !important;
+            border-color: #dc3545 !important;
+            color: #721c24;
+        }
+
+        .feedback-container {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 6px;
+            background-color: #f9f6f0;
+            border-left: 5px solid var(--gold);
+        }
+
+        .feedback-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .next-btn {
+            display: block;
+            width: 100%;
+            background-color: var(--burgundy);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .next-btn:hover {
+            background-color: #521523;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .results-screen {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <!-- Quiz Screen -->
+    <div id="quiz-screen">
+        <div class="score-board">Score: <span id="score">0</span> / <span id="total-questions">0</span></div>
+        <div class="question" id="question-text">Question text goes here?</div>
+        <div class="options-container" id="options-box">
+            <!-- Options dynamically added here -->
+        </div>
+        <div id="feedback-box" class="feedback-container hide">
+            <div class="feedback-title" id="feedback-status"></div>
+            <p id="feedback-text"></p>
+        </div>
+        <button id="next-button" class="next-btn hide">Next Question</button>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen" class="results-screen hide">
+        <h2>Curtain Call!</h2>
+        <p>You have finished the quiz.</p>
+        <p style="font-size: 1.5rem; font-weight: bold;">Final Score: <span id="final-score">0</span></p>
+        <p id="performance-msg"></p>
+        <button class="next-btn" onclick="resetGame()">Play Again</button>
+    </div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            question: "Which play features the feuding families of the Capulets and the Montagues?",
+            options: ["Hamlet", "Romeo and Juliet", "Macbeth", "Othello"],
+            correct: 1,
+            history: "Written around 1595-1597. It is one of Shakespeare's most famous tragedies, exploring the doomed love of two teenagers amidst an ancient family vendetta in Verona."
+        },
+        {
+            question: "Where was William Shakespeare born in 1564?",
+            options: ["London", "Stratford-upon-Avon", "Oxford", "Edinburgh"],
+            correct: 1,
+            history: "Born in 1564 (baptized April 26). Stratford-upon-Avon was a market town where his father, John Shakespeare, was a successful glover and local alderman."
+        },
+        {
+            question: "Which of these characters is the witty, cynical companion to Prince Hal in Henry IV?",
+            options: ["Sir John Falstaff", "Iago", "Mercutio", "Bottom"],
+            correct: 0,
+            history: "Henry IV, Part 1 was written around 1596-1597. Falstaff became so wildly popular for his comic cowardice and wit that Queen Elizabeth requested a play showing him in love, resulting in 'The Merry Wives of Windsor'."
+        },
+        {
+            question: "In which tragedy does the title character murder King Duncan to seize the Scottish throne?",
+            options: ["King Lear", "Macbeth", "Julius Caesar", "Richard III"],
+            correct: 1,
+            history: "Written around 1606. Often called 'The Scottish Play' due to a theatrical superstition, this intense tragedy explores the psychological damage of ambition and guilt."
+        },
+        {
+            question: "Who is the fairy king in the comedy 'A Midsummer Night's Dream'?",
+            options: ["Puck", "Oberon", "Lysander", "Prospero"],
+            correct: 1,
+            history: "Written around 1595-1596. The play weaves together multiple plotlines, including the marital dispute between the fairy King Oberon and Queen Titania in an enchanted Athenian forest."
+        },
+        {
+            question: "Shakespeare was a shareholder in an acting company formed in 1594. What was its original name?",
+            options: ["The King's Men", "The Globe Players", "The Lord Chamberlain's Men", "The Royal Shakespeareans"],
+            correct: 2,
+            history: "Formed in 1594 under the patronage of Henry Carey, Lord Chamberlain. Following the accession of King James I in 1603, the company was renamed 'The King's Men'."
+        },
+        {
+            question: "Which character famously exclaims, 'The lady doth protest too much, methinks'?",
+            options: ["Ophelia", "Lady Macbeth", "Queen Gertrude", "Portia"],
+            correct: 2,
+            history: "From Hamlet, written around 1599-1601. Gertrude remarks this while watching a play-within-a-play that mirrors her own hasty remarriage after her husband's death."
+        },
+        {
+            question: "Prospero and his daughter Miranda are marooned on a remote island in which play?",
+            options: ["The Tempest", "Twelfth Night", "The Comedy of Errors", "Pericles"],
+            correct: 0,
+            history: "Written around 1610-1611. It is widely considered to be the last play Shakespeare wrote entirely by himself, with Prospero's farewell to magic often interpreted as Shakespeare's own farewell to the stage."
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    const quizScreen = document.getElementById('quiz-screen');
+    const resultsScreen = document.getElementById('results-screen');
+    const questionText = document.getElementById('question-text');
+    const optionsBox = document.getElementById('options-box');
+    const feedbackBox = document.getElementById('feedback-box');
+    const feedbackStatus = document.getElementById('feedback-status');
+    const feedbackText = document.getElementById('feedback-text');
+    const nextButton = document.getElementById('next-button');
+    const scoreElement = document.getElementById('score');
+    const totalQuestionsElement = document.getElementById('total-questions');
+    const finalScoreElement = document.getElementById('final-score');
+    const performanceMsg = document.getElementById('performance-msg');
+
+    function loadQuestion() {
+        resetState();
+        let currentQuestion = quizData[currentQuestionIndex];
+        questionText.innerText = `${currentQuestionIndex + 1}. ${currentQuestion.question}`;
+        totalQuestionsElement.innerText = quizData.length;
+        scoreElement.innerText = score;
+
+        currentQuestion.options.forEach((option, index) => {
+            const button = document.createElement('button');
+            button.innerText = option;
+            button.classList.add('btn');
+            button.addEventListener('click', () => selectAnswer(index));
+            optionsBox.appendChild(button);
+        });
+    }
+
+    function resetState() {
+        feedbackBox.classList.add('hide');
+        nextButton.classList.add('hide');
+        while (optionsBox.firstChild) {
+            optionsBox.removeChild(optionsBox.firstChild);
+        }
+    }
+
+    function selectAnswer(selectedIndex) {
+        const currentQuestion = quizData[currentQuestionIndex];
+        const buttons = optionsBox.querySelectorAll('.btn');
+        
+        // Disable all buttons so user can't change answer
+        buttons.forEach(btn => btn.disabled = true);
+
+        if (selectedIndex === currentQuestion.correct) {
+            buttons[selectedIndex].classList.add('correct');
+            feedbackStatus.innerText = "✨ Correct!";
+            feedbackStatus.style.color = "#155724";
+            score++;
+            scoreElement.innerText = score;
+        } else {
+            buttons[selectedIndex].classList.add('wrong');
+            buttons[currentQuestion.correct].classList.add('correct');
+            feedbackStatus.innerText = "❌ Incorrect";
+            feedbackStatus.style.color = "#721c24";
+        }
+
+        // Show detailed description and context details
+        feedbackText.innerText = currentQuestion.history;
+        feedbackBox.classList.remove('hide');
+        nextButton.classList.remove('hide');
+    }
+
+    nextButton.addEventListener('click', () => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    });
+
+    function showResults() {
+        quizScreen.classList.add('hide');
+        resultsScreen.classList.remove('hide');
+        finalScoreElement.innerText = `${score} / ${quizData.length}`;
+        
+        if(score === quizData.length) {
+            performanceMsg.innerText = "All the world's a stage, and you are a Master of the Bard!";
+        } else if (score >= quizData.length / 2) {
+            performanceMsg.innerText = "A noble effort! You know your way around Elizabethan drama.";
+        } else {
+            performanceMsg.innerText = "To study or not to study? That is the question. Try again!";
+        }
+    }
+
+    function resetGame() {
+        currentQuestionIndex = 0;
+        score = 0;
+        resultsScreen.classList.add('hide');
+        quizScreen.classList.remove('hide');
+        loadQuestion();
+    }
+
+    // Initialize game
+    loadQuestion();
+</script>
+
+</body>
+</html>

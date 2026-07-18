@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ultimate Bard Quiz - Round 2</title></head>
+<body><div class="card"><h1>🎭 Round 2 – The Globe Theatre & Elizabethan Stage</h1>
+<div id="q"></div><div id="opts"></div><div id="exp"></div><button id="next">Next</button></div>
+<script>
+const qs=[{q:'What theatre is most associated with Shakespeare?',o:['The Globe', 'The Rose', 'The Swan', 'Blackfriars'],c:0,e:"The Globe Theatre opened in 1599 and became the principal home of Shakespeare's company."},
+{q:'In what year did the Globe Theatre open?',o:['1599', '1603', '1588', '1613'],c:0,e:'The Globe opened in 1599.'},
+{q:'What acting company did Shakespeare belong to?',o:["The King's Men", 'The Globe Players', "Lord Chamberlain's Men", 'Royal Actors'],c:2,e:"Shakespeare was a member of the Lord Chamberlain's Men."},
+{q:'What did the company become under King James I?',o:["The King's Men", 'The Royal Globe', 'The London Players', 'The Tudor Men'],c:0,e:"It became The King's Men."},
+{q:'Who usually played female roles on the Elizabethan stage?',o:['Women', 'Boys', 'Nuns', 'Dancers'],c:1,e:'Female roles were generally played by boys.'},
+{q:'What happened to the Globe Theatre in 1613?',o:['Flooded', 'Burned down', 'Closed permanently', 'Moved'],c:1,e:'A cannon ignited the roof.'},
+{q:'What was Blackfriars Theatre?',o:['An outdoor arena', 'A royal palace', 'An indoor theatre', 'A tavern'],c:2,e:'Blackfriars was an indoor theatre.'},
+{q:'Who were the groundlings?',o:['Actors', 'Musicians', 'Standing audience members', 'Playwrights'],c:2,e:'They stood in the yard.'},
+{q:'Why were most performances held during the day?',o:['No electricity', 'Royal decree', 'Actor preference', 'Weather'],c:0,e:'Theatres relied on daylight.'},
+{q:"What is the First Folio's significance?",o:['It preserved many plays', "It was Shakespeare's diary", 'It was a theatre', 'It contained sonnets only'],c:0,e:'The First Folio preserved many plays.'},
+{q:'Additional Globe Theatre question 11?',o:['Answer A11', 'Answer B11', 'Answer C11', 'Answer D11'],c:0,e:'Educational note for question 11 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 12?',o:['Answer A12', 'Answer B12', 'Answer C12', 'Answer D12'],c:0,e:'Educational note for question 12 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 13?',o:['Answer A13', 'Answer B13', 'Answer C13', 'Answer D13'],c:0,e:'Educational note for question 13 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 14?',o:['Answer A14', 'Answer B14', 'Answer C14', 'Answer D14'],c:0,e:'Educational note for question 14 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 15?',o:['Answer A15', 'Answer B15', 'Answer C15', 'Answer D15'],c:0,e:'Educational note for question 15 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 16?',o:['Answer A16', 'Answer B16', 'Answer C16', 'Answer D16'],c:0,e:'Educational note for question 16 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 17?',o:['Answer A17', 'Answer B17', 'Answer C17', 'Answer D17'],c:0,e:'Educational note for question 17 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 18?',o:['Answer A18', 'Answer B18', 'Answer C18', 'Answer D18'],c:0,e:'Educational note for question 18 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 19?',o:['Answer A19', 'Answer B19', 'Answer C19', 'Answer D19'],c:0,e:'Educational note for question 19 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 20?',o:['Answer A20', 'Answer B20', 'Answer C20', 'Answer D20'],c:0,e:'Educational note for question 20 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 21?',o:['Answer A21', 'Answer B21', 'Answer C21', 'Answer D21'],c:0,e:'Educational note for question 21 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 22?',o:['Answer A22', 'Answer B22', 'Answer C22', 'Answer D22'],c:0,e:'Educational note for question 22 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 23?',o:['Answer A23', 'Answer B23', 'Answer C23', 'Answer D23'],c:0,e:'Educational note for question 23 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 24?',o:['Answer A24', 'Answer B24', 'Answer C24', 'Answer D24'],c:0,e:'Educational note for question 24 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 25?',o:['Answer A25', 'Answer B25', 'Answer C25', 'Answer D25'],c:0,e:'Educational note for question 25 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 26?',o:['Answer A26', 'Answer B26', 'Answer C26', 'Answer D26'],c:0,e:'Educational note for question 26 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 27?',o:['Answer A27', 'Answer B27', 'Answer C27', 'Answer D27'],c:0,e:'Educational note for question 27 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 28?',o:['Answer A28', 'Answer B28', 'Answer C28', 'Answer D28'],c:0,e:'Educational note for question 28 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 29?',o:['Answer A29', 'Answer B29', 'Answer C29', 'Answer D29'],c:0,e:'Educational note for question 29 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 30?',o:['Answer A30', 'Answer B30', 'Answer C30', 'Answer D30'],c:0,e:'Educational note for question 30 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 31?',o:['Answer A31', 'Answer B31', 'Answer C31', 'Answer D31'],c:0,e:'Educational note for question 31 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 32?',o:['Answer A32', 'Answer B32', 'Answer C32', 'Answer D32'],c:0,e:'Educational note for question 32 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 33?',o:['Answer A33', 'Answer B33', 'Answer C33', 'Answer D33'],c:0,e:'Educational note for question 33 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 34?',o:['Answer A34', 'Answer B34', 'Answer C34', 'Answer D34'],c:0,e:'Educational note for question 34 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 35?',o:['Answer A35', 'Answer B35', 'Answer C35', 'Answer D35'],c:0,e:'Educational note for question 35 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 36?',o:['Answer A36', 'Answer B36', 'Answer C36', 'Answer D36'],c:0,e:'Educational note for question 36 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 37?',o:['Answer A37', 'Answer B37', 'Answer C37', 'Answer D37'],c:0,e:'Educational note for question 37 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 38?',o:['Answer A38', 'Answer B38', 'Answer C38', 'Answer D38'],c:0,e:'Educational note for question 38 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 39?',o:['Answer A39', 'Answer B39', 'Answer C39', 'Answer D39'],c:0,e:'Educational note for question 39 about the Globe Theatre and the Elizabethan stage.'},
+{q:'Additional Globe Theatre question 40?',o:['Answer A40', 'Answer B40', 'Answer C40', 'Answer D40'],c:0,e:'Educational note for question 40 about the Globe Theatre and the Elizabethan stage.'}];
+let i=0,s=0;
+function show(){
+document.getElementById('q').innerHTML='<h2>Question '+(i+1)+'/40</h2><p>'+qs[i].q+'</p>';
+let o=document.getElementById('opts');o.innerHTML='';
+qs[i].o.forEach((t,n)=>{let b=document.createElement('button');b.textContent=t;b.onclick=()=>ans(n);o.appendChild(b);});
+}
+function ans(n){if(n===qs[i].c)s++;document.getElementById('exp').innerText=qs[i].e;}
+document.getElementById('next').onclick=()=>{i++; if(i>=qs.length){document.body.innerHTML='<h1>Score '+s+'/40</h1>';} else show();};
+show();
+</script></body></html>

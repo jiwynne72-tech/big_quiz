@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call My Bluff: The Complete Collection</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #1a2a6c; min-height: 100vh; display: flex; justify-content: center; align-items: center; margin: 0; color: #333; }
+        .quiz-container { background: #fff; padding: 25px; border-radius: 20px; width: 95%; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); text-align: center; }
+        .word { font-size: 1.8em; color: #b21f1f; margin: 20px 0; font-weight: bold; text-transform: uppercase; }
+        .option { display: block; width: 100%; padding: 18px; margin: 10px 0; border: 2px solid #ddd; border-radius: 12px; cursor: pointer; font-size: 16px; background: #f9f9f9; text-align: left; transition: 0.2s; }
+        .option:active { background: #e0e0e0; }
+        .correct { background: #27ae60 !important; color: white !important; border-color: #27ae60 !important; }
+        .wrong { background: #c0392b !important; color: white !important; border-color: #c0392b !important; }
+        #next-btn { display: none; width: 100%; padding: 15px; margin-top: 20px; background: #fdbb2d; border: none; border-radius: 10px; font-weight: bold; font-size: 1.1em; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div id="word" class="word">Loading...</div>
+    <div id="options"></div>
+    <div id="explanation" style="margin: 20px 0; padding: 10px; background: #f4f4f4; border-left: 5px solid #fdbb2d; display: none; text-align: left; font-size: 0.95em;"></div>
+    <button id="next-btn" onclick="nextQuestion()">Next Question &rarr;</button>
+</div>
+
+<script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.frequency.value = (type === 'correct') ? 800 : 150;
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+    }
+
+    const quizData = [
+        { word: "Accismus", options: ["A form of tax evasion", "Pretending to refuse something you actually want", "A muscle in the lower back"], correct: "Pretending to refuse something you actually want", exp: "From Greek 'akkismos'. It describes a show of reluctance to hide desire." },
+        { word: "Acersecomicke", options: ["One whose hair was never cut", "A bitter argument", "A device for cracking nuts"], correct: "One whose hair was never cut", exp: "An old term for someone with uncut hair." },
+        { word: "Agelast", options: ["A person who never laughs", "A type of elastic glue", "A Roman magistrate"], correct: "A person who never laughs", exp: "Derived from the Greek 'agelastos'—someone incapable of mirth." },
+        { word: "Ballyrag", options: ["To dance in a ballroom", "To bully or tease someone", "A type of wool fabric"], correct: "To bully or tease someone", exp: "18th-century British slang meaning to scold or bully." },
+        { word: "Borborygmus", options: ["The fear of deep water", "A rhythmic tribal dance", "The rumbling sound of a stomach"], correct: "The rumbling sound of a stomach", exp: "The technical medical term for the noise gas makes in the intestines." },
+        { word: "Cacography", options: ["Bad handwriting", "A style of ornate pottery", "The study of ancient coins"], correct: "Bad handwriting", exp: "From Greek 'kakos' (bad) + 'graphein' (to write)." },
+        { word: "Catawampus", options: ["Standing askew or awry", "A large jungle cat", "A type of sweet pastry"], correct: "Standing askew or awry", exp: "American dialect term meaning diagonal or crooked." },
+        { word: "Deipnosophist", options: ["A person skilled at dinner-table conversation", "A lover of fine wines", "A sculptor of marble"], correct: "A person skilled at dinner-table conversation", exp: "From Greek 'deipnon' (dinner) + 'sophistes' (wise man)." },
+        { word: "Defenestration", options: ["The act of throwing someone out of a window", "A type of architectural fence", "A legal process"], correct: "The act of throwing someone out of a window", exp: "Derived from Latin 'fenestra' (window)." },
+        { word: "Filipendulous", options: ["Suspended by a thread", "A type of gymnastic move", "Fond of fine jewelry"], correct: "Suspended by a thread", exp: "From Latin 'filum' (thread) + 'pendulus' (hanging)." },
+        { word: "Flibbertigibbet", options: ["A flighty or scatterbrained person", "A type of small bird", "A spinning toy"], correct: "A flighty or scatterbrained person", exp: "A Middle English word used to describe someone frivolous." },
+        { word: "Gobemouche", options: ["A gullible person", "A type of French cheese", "A fly-fishing technique"], correct: "A gullible person", exp: "From French 'gober' (to swallow) + 'mouche' (fly)." },
+        { word: "Jentacular", options: ["Pertaining to breakfast", "A type of clock", "Very talkative"], correct: "Pertaining to breakfast", exp: "From Latin 'jentaculum', a breakfast taken early." },
+        { word: "Kenspeckle", options: ["Conspicuous or easily recognizable", "A type of Scottish wool", "A blurred vision"], correct: "Conspicuous or easily recognizable", exp: "Of Scots origin, 'ken' (to know) + 'speckle' (mark)." },
+        { word: "Lollygag", options: ["To spend time aimlessly", "A sweet candy", "A dance move"], correct: "To spend time aimlessly", exp: "19th-century American slang." },
+        { word: "Mellifluous", options: ["Sweet-sounding; musical", "A type of golden honey", "A slow-moving river"], correct: "Sweet-sounding; musical", exp: "From Latin 'mel' (honey) + 'fluere' (to flow)." },
+        { word: "Mordacious", options: ["Biting or sharp in style", "A type of desert lizard", "Extremely brave"], correct: "Biting or sharp in style", exp: "From Latin 'mordere' (to bite)." },
+        { word: "Pandiculate", options: ["To stretch oneself, as when waking up", "To pan for gold", "A type of ancient dance"], correct: "To stretch oneself, as when waking up", exp: "From Latin 'pandiculari' (to stretch)." },
+        { word: "Persiflage", options: ["Light, frivolous banter", "A type of French perfume", "A silk scarf"], correct: "Light, frivolous banter", exp: "Refers to mocking or teasing talk." },
+        { word: "Scripturient", options: ["Having a strong urge to write", "A religious scholar", "A type of ink"], correct: "Having a strong urge to write", exp: "From Latin, describing a 'scribbling itch'." },
+        { word: "Solivagant", options: ["Rambling alone; a solitary wanderer", "A type of ancient coin", "A nocturnal animal"], correct: "Rambling alone; a solitary wanderer", exp: "From Latin 'solus' (alone) + 'vagans' (wandering)." },
+        { word: "Snickersnee", options: ["A large knife", "A type of winter shoe", "A small bird"], correct: "A large knife", exp: "From Dutch 'steken' (to stick) + 'snee' (cut)." },
+        { word: "Ugsome", options: ["Frightful or repulsive", "A type of warm rug", "A type of hug"], correct: "Frightful or repulsive", exp: "From Old English 'ugge' (to fear)." },
+        { word: "Verklempt", options: ["Seized with overwhelming emotion", "A type of mountain tool", "A German clock"], correct: "Seized with overwhelming emotion", exp: "Yiddish origin; describes being choked up." },
+        { word: "Absquatulate", options: ["To leave abruptly", "To cook food", "To build a house"], correct: "To leave abruptly", exp: "American 'mock-Latin' meaning to flee." },
+        { word: "Aeolist", options: ["A pretentious person", "A wind-worshipper", "A type of organist"], correct: "A pretentious person", exp: "Used for someone who is 'full of hot air'." },
+        { word: "Aglifft", options: ["Frightened or alarmed", "A type of cliff", "A hand gesture"], correct: "Frightened or alarmed", exp: "A dialect word meaning to be startled." },
+        { word: "Callipygian", options: ["Having a well-shaped bottom", "A type of ancient vase", "A lover of music"], correct: "Having a well-shaped bottom", exp: "From Greek 'kallipygos' (beautiful buttocks)." },
+        { word: "Contretemps", options: ["An awkward clash or mishap", "A type of clock", "A fast dance"], correct: "An awkward clash or mishap", exp: "French for 'against time'." },
+        { word: "Coterie", options: ["An exclusive circle of people", "A type of kitchen knife", "A small bird"], correct: "An exclusive circle of people", exp: "An association of people with shared interests." },
+        { word: "Cuirassier", options: ["A cavalryman in armor", "A type of wine", "A metal shield"], correct: "A cavalryman in armor", exp: "Referring to the breastplate they wore." },
+        { word: "Dactylomegaly", options: ["Abnormally large fingers or toes", "A type of ancient dance", "A large lizard"], correct: "Abnormally large fingers or toes", exp: "From Greek 'daktylos' (finger) + 'megalos' (large)." },
+        { word: "Deliquesce", options: ["To dissolve by absorbing moisture", "To sing beautifully", "To fold paper"], correct: "To dissolve by absorbing moisture", exp: "From Latin 'deliquescere' (to melt away)." },
+        { word: "Eleemosynary", options: ["Relating to charity", "A type of food", "A church official"], correct: "Relating to charity", exp: "From Greek 'eleemosyne' (pity/alms)." },
+        { word: "Fugacious", options: ["Lasting a very short time", "A fast runner", "A type of bird"], correct: "Lasting a very short time", exp: "From Latin 'fugax' (fleeting)." },
+        { word: "Apricity", options: ["The warmth of the sun in winter", "A sudden jump in price", "A type of ancient pottery"], correct: "The warmth of the sun in winter", exp: "From Latin 'apricitas'." },
+        { word: "Blandiloquence", options: ["Flattering speech", "A dull conversation", "A type of musical note"], correct: "Flattering speech", exp: "From 'blandus' (flattering) + 'loqui' (to speak)." },
+        { word: "Crapulous", options: ["Suffering from excessive drinking", "A type of small fish", "Extremely messy"], correct: "Suffering from excessive drinking", exp: "From Latin 'crapula' (intoxication)." },
+        { word: "Deflagrate", options: ["To burn down suddenly", "To lose one's flag", "To act with grace"], correct: "To burn down suddenly", exp: "Refers to rapid combustion." },
+        { word: "Esurient", options: ["Hungry or greedy", "A type of insect", "A musical term"], correct: "Hungry or greedy", exp: "From Latin 'esurire' (to be hungry)." },
+        { word: "Frowzy", options: ["Slovenly or unkempt", "A type of sour milk", "A cold wind"], correct: "Slovenly or unkempt", exp: "Used to describe a dishevelled appearance." },
+        { word: "Gorgonize", options: ["To turn to stone", "To eat voraciously", "To decorate a room"], correct: "To turn to stone", exp: "From the Greek Gorgon Medusa." },
+        { word: "Hircine", options: ["Resembling a goat", "A type of forest", "A sharp-pointed stick"], correct: "Resembling a goat", exp: "From Latin 'hircus' (goat)." },
+        { word: "Inanition", options: ["Exhaustion from lack of nourishment", "Lack of intelligence", "A state of non-existence"], correct: "Exhaustion from lack of nourishment", exp: "Refers to physical or mental depletion." },
+        { word: "Jejune", options: ["Naive, simplistic, or dull", "A type of desert plant", "A fast-paced dance"], correct: "Naive, simplistic, or dull", exp: "Derived from 'jejunus' (fasting/empty)." },
+        { word: "Kenopsia", options: ["The eerie atmosphere of a deserted place", "A type of optical illusion", "A fear of height"], correct: "The eerie atmosphere of a deserted place", exp: "Refers to the feeling of places usually busy but now empty." },
+        { word: "Logorrhea", options: ["Excessive wordiness", "A type of medicinal syrup", "A fear of books"], correct: "Excessive wordiness", exp: "From 'logos' (word) + 'rhoia' (flow)." },
+        { word: "Mungo", options: ["Wool made from reclaimed scraps", "A mythical creature", "A type of African drum"], correct: "Wool made from reclaimed scraps", exp: "A material made from recycled wool." },
+        { word: "Nudiustertian", options: ["Of or relating to the day before yesterday", "A type of ancient sculpture", "A sea-faring term"], correct: "Of or relating to the day before yesterday", exp: "From Latin 'nudius tertius'." },
+        { word: "Obnubilate", options: ["To darken or obscure", "A type of cloud formation", "To make a loud noise"], correct: "To darken or obscure", exp: "From Latin 'obnubilare' (to cloud over)." },
+        { word: "Pauciloquent", options: ["Using few words; brief", "A slow talker", "A type of small bird"], correct: "Using few words; brief", exp: "From 'paucus' (few) + 'loqui' (speak)." },
+        { word: "Quomodocunque", options: ["In any way possible", "A strange clock", "A type of medieval law"], correct: "In any way possible", exp: "Latin term for 'however it may be'." },
+        { word: "Rhadamanthine", options: ["Strictly and inflexibly just", "A type of ancient coin", "A fast runner"], correct: "Strictly and inflexibly just", exp: "Named after the judge Rhadamanthus." },
+        { word: "Succedaneum", options: ["A substitute", "A type of acid", "A high-ranking official"], correct: "A substitute", exp: "Often used in medical or legal contexts." },
+        { word: "Tenebrous", options: ["Dark, shadowy, or obscure", "A type of musical instrument", "A brave warrior"], correct: "Dark, shadowy, or obscure", exp: "From Latin 'tenebrae' (darkness)." },
+        { word: "Ultracrepidarian", options: ["Giving opinions on matters beyond one's knowledge", "A type of ultra-fast engine", "A very old person"], correct: "Giving opinions on matters beyond one's knowledge", exp: "Literally 'beyond the sole' (shoemaker)." },
+        { word: "Vaticinate", options: ["To prophesy", "To dance rhythmically", "To write poetry"], correct: "To prophesy", exp: "From Latin 'vates' (prophet)." },
+        { word: "Wamble", options: ["To move unsteadily or roll", "A type of small boat", "A joyful song"], correct: "To move unsteadily or roll", exp: "Of Middle English origin." },
+        { word: "Xenodochial", options: ["Friendly to strangers", "A fear of strangers", "A type of ancient architecture"], correct: "Friendly to strangers", exp: "From Greek 'xenos' (stranger) + 'doche' (reception)." },
+        { word: "Yarborough", options: ["A hand of cards with no card higher than nine", "A type of British castle", "A gardener's tool"], correct: "A hand of cards with no card higher than nine", exp: "Named after Lord Yarborough." },
+        { word: "Zenzizenzizenzic", options: ["The eighth power of a number", "A type of ancient dance", "A rare mineral"], correct: "The eighth power of a number", exp: "An archaic mathematical term." },
+        { word: "Bumfuzzle", options: ["To confuse or fluster", "A type of soft fabric", "A playful dance"], correct: "To confuse or fluster", exp: "Midwestern American slang." },
+        { word: "Gnashab", options: ["To show teeth in anger", "A small handheld fan", "A type of desert bird"], correct: "To show teeth in anger", exp: "Often related to grinding or gnashing teeth." },
+        { word: "Pusillanimous", options: ["Showing a lack of courage; cowardly", "Very small in size", "Loud and boisterous"], correct: "Showing a lack of courage; cowardly", exp: "From Latin 'pusillus' (very small) + 'animus' (spirit)." },
+        { word: "Quidnunc", options: ["A gossip or busybody", "A type of quick snack", "A sudden stop"], correct: "A gossip or busybody", exp: "Latin for 'what now?'" }
+    ];
+
+    let currentIdx = 0;
+    let shuffledList = [...quizData].sort(() => Math.random() - 0.5);
+
+    function loadQuestion() {
+        const q = shuffledList[currentIdx];
+        document.getElementById('word').textContent = q.word;
+        const optionsDiv = document.getElementById('options');
+        optionsDiv.innerHTML = '';
+        document.getElementById('explanation').style.display = 'none';
+        document.getElementById('next-btn').style.display = 'none';
+
+        [...q.options].sort(() => Math.random() - 0.5).forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option';
+            btn.textContent = opt;
+            btn.onclick = () => {
+                document.querySelectorAll('.option').forEach(b => b.disabled = true);
+                if (opt === q.correct) {
+                    btn.classList.add('correct');
+                    playSound('correct');
+                } else {
+                    btn.classList.add('wrong');
+                    playSound('wrong');
+                    document.querySelectorAll('.option').forEach(b => { if(b.textContent === q.correct) b.classList.add('correct'); });
+                }
+                document.getElementById('explanation').innerHTML = "<strong>Fact:</strong> " + q.exp;
+                document.getElementById('explanation').style.display = 'block';
+                document.getElementById('next-btn').style.display = 'block';
+            };
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function nextQuestion() {
+        currentIdx++;
+        if (currentIdx < shuffledList.length) loadQuestion();
+        else document.querySelector('.quiz-container').innerHTML = "<h1>Quiz Complete!</h1><p>You've mastered all 65 words.</p>";
+    }
+
+    loadQuestion();
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Greek Master v3</title>
+<style>
+body{
+ margin:0;background:#eef3f8;font-family:Arial,sans-serif;
+ display:flex;justify-content:center;align-items:center;
+ min-height:100vh;
+}
+.card{
+ width:min(92vw,650px);
+ background:white;
+ border-radius:18px;
+ padding:24px;
+ box-shadow:0 8px 24px rgba(0,0,0,.15);
+ text-align:center;
+}
+h1{color:#1f3f75;margin-top:0}
+button{
+ width:100%;padding:14px;margin:8px 0;
+ border:none;border-radius:10px;
+ background:#1f3f75;color:white;font-size:16px;cursor:pointer;
+}
+.hidden{display:none}
+.big{font-size:70px;margin:20px 0}
+.small{color:#888;font-style:italic;font-size:18px;margin-top:-10px}
+.opt{background:white;color:#1f3f75;border:2px solid #1f3f75}
+.correct{background:#2e8b57!important;color:white}
+.wrong{background:#c0392b!important;color:white}
+table{width:100%;border-collapse:collapse}
+td,th{border:1px solid #ddd;padding:7px}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>🇬🇷 Greek Master</h1>
+
+<div id="menu">
+<button onclick="tableView()">Alphabet Reference</button>
+<button onclick="start('alphabet')">Alphabet Quiz</button>
+<button onclick="start('sayings')">Greek Sayings</button>
+</div>
+
+<div id="table" class="hidden">
+<h2>Greek Alphabet</h2>
+<table id="tbl"><tr><th>Letter</th><th>Name</th></tr></table>
+<button onclick="home()">Back</button>
+</div>
+
+<div id="quiz" class="hidden">
+<div id="main" class="big"></div>
+<div id="phon" class="small"></div>
+<div id="answers"></div>
+<button onclick="next()">Next ▶</button>
+<button onclick="home()">Back</button>
+</div>
+
+</div>
+
+<script>
+const alphabet=[
+["Α α","Alpha"],["Β β","Beta"],["Γ γ","Gamma"],["Δ δ","Delta"],["Ε ε","Epsilon"],["Ζ ζ","Zeta"],["Η η","Eta"],["Θ θ","Theta"],["Ι ι","Iota"],["Κ κ","Kappa"],["Λ λ","Lambda"],["Μ μ","Mu"],["Ν ν","Nu"],["Ξ ξ","Xi"],["Ο ο","Omicron"],["Π π","Pi"],["Ρ ρ","Rho"],["Σ σ/ς","Sigma"],["Τ τ","Tau"],["Υ υ","Upsilon"],["Φ φ","Phi"],["Χ χ","Chi"],["Ψ ψ","Psi"],["Ω ω","Omega"]
+];
+
+alphabet.forEach(a=>tbl.innerHTML+=`<tr><td>${a[0]}</td><td>${a[1]}</td></tr>`);
+
+const sayings=[
+["Γνῶθι σεαυτόν","Know thyself","Gnothi seauton"],
+["Πάντα ῥεῖ","Everything flows","Panta rhei"],
+["Εὕρηκα!","I have found it!","Heureka"],
+["Μηδὲν ἄγαν","Nothing in excess","Meden agan"],
+["Σπεῦδε βραδέως","Make haste slowly","Speude bradeos"],
+["Μέτρον ἄριστον","Moderation is best","Metron ariston"],
+["Τύχη τὸν τολμῶντα φιλεῖ","Fortune favours the brave","Tyche ton tolmonta philei"],
+["Ὁ χρόνος πάντα θεραπεύει","Time heals all","Ho chronos panta therapeuei"],
+["Φίλος δεύτερος ἑαυτός","A friend is another self","Philos deuteros heautos"],
+["Ἀρχὴ ἥμισυ παντός","Well begun is half done","Arche hemisy pantos"],
+["Οὐδὲν καινὸν ὑπὸ τὸν ἥλιον","Nothing new under the sun","Ouden kainon hypo ton helion"],
+["Ζῆν σημαίνει μαθαίνειν","To live is to learn","Zen semainei mathainein"],
+["Καρπὸς τῶν πόνων","Fruit of labour","Karpos ton ponon"],
+["Ἡ σοφία δύναμις","Wisdom is power","He sophia dynamis"],
+["Λόγος καὶ ἔργον","Words and deeds","Logos kai ergon"],
+["Χαλεπὰ τὰ καλά","Beautiful things are difficult","Chalepa ta kala"],
+["Ἀλήθεια νικᾷ","Truth conquers","Aletheia nika"],
+["Ἐλπὶς τελευταία","Hope dies last","Elpis teleutaia"],
+["Σοφία φῶς","Wisdom is light","Sophia phos"],
+["Γλῶσσα ψυχῆς","Language of the soul","Glossa psyches"]
+];
+
+let mode,item;
+
+function tableView(){hideAll();table.classList.remove("hidden")}
+function start(m){mode=m;hideAll();quiz.classList.remove("hidden");next();}
+function hideAll(){menu.classList.add("hidden");table.classList.add("hidden");quiz.classList.add("hidden")}
+function home(){location.reload()}
+
+function next(){
+if(mode==="alphabet"){
+ item=alphabet[Math.floor(Math.random()*alphabet.length)];
+ main.textContent=item[0];
+ phon.textContent="";
+ makeAnswers(item[1],alphabet.map(x=>x[1]));
+}else{
+ item=sayings[Math.floor(Math.random()*sayings.length)];
+ main.textContent=item[0];
+ phon.textContent=item[2];
+ makeAnswers(item[1],sayings.map(x=>x[1]));
+}
+}
+
+function makeAnswers(correct,pool){
+answers.innerHTML="";
+let opts=[correct];
+while(opts.length<4){
+ let x=pool[Math.floor(Math.random()*pool.length)];
+ if(!opts.includes(x))opts.push(x);
+}
+opts.sort(()=>Math.random()-.5);
+opts.forEach(o=>{
+ let b=document.createElement("button");
+ b.className="opt";
+ b.textContent=o;
+ b.onclick=()=>{if(o===correct)b.classList.add("correct");else b.classList.add("wrong");};
+ answers.appendChild(b);
+});
+}
+</script>
+</body>
+</html>

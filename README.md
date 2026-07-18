@@ -2,7 +2,7 @@
 
 > A growing collection of educational games, quizzes and interactive learning tools by **James Wynne**.
 
-![JW BrainBox](icon_JW.png)
+![JW BrainBox](icon.png)
 
 ## 🌟 About
 
